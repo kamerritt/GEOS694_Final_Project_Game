@@ -26,6 +26,7 @@ class Game:
     def __init__(self, image, x, y, width, height):
         self.image = image
         self.rect = pygame.Rect(x, y, width, height)
+        self.mask = pygame.mask.from_surface(image)
 
     def draw(self, win):
         win.blit(self.image, (self.rect.x, self.rect.y)) # Draw object on screen
@@ -62,7 +63,9 @@ class Fire(Game):
         return self.rect.y > HEIGHT # Fire moves off screen 
     
     def hit(self, avatar):
-        return self.rect.colliderect(avatar.rect) # Handle fire/avatar collision
+        # Allow for exact collisions between fire and avatar
+        dist = (self.rect.x - avatar.rect.x, self.rect.y - avatar.rect.y)
+        return avatar.mask.overlap(self.mask, dist) is not None
     
 class Play:
     def __init__(self):
@@ -116,7 +119,7 @@ class Play:
         # If avatar is hit, game ends after 4 seconds of losing text
         lost_text = FONT.render('You Lost :(', 1, 'white')
         WIN.blit(lost_text, (WIDTH/2 - lost_text.get_width()/2, 
-                             HEIGHT/2 - lost_text.get_height()/2))
+        HEIGHT/2 - lost_text.get_height()/2))
 
         pygame.display.update()
         pygame.time.delay(4000)
