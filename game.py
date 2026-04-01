@@ -19,13 +19,18 @@ FIRE_IMAGE = pygame.transform.scale(pygame.image.load('game_images/flame_transpa
 
 FONT = pygame.font.SysFont('comicsans', 30) # Set font type
 
-class Avatar: 
-    # Initialize avatar parameters 
+class Game:
+    def __init__(self, image, x, y, width, height):
+        self.image = image
+        self.rect = pygame.Rect(x, y, width, height)
+
+    def draw(self, win):
+        win.blit(self.image, (self.rect.x, self.rect.y)) # Draw object on screen
+
+class Avatar(Game): 
     def __init__(self):
-        self.rect = PLAYER_IMAGE.get_rect()
-        self.rect.x = 200 # Starting location 
-        self.rect.bottom = HEIGHT # Place on bottom of gameplay screen
-        self.vel = 5 # Set velocity
+        super().__init__(PLAYER_IMAGE, 200, HEIGHT-100, 100, 100) # Inherit self parameters from Game parent class
+        self.vel = 5 # Set avatar velocity
     
     def move(self, keys):
         keys = pygame.key.get_pressed()
@@ -38,10 +43,26 @@ class Avatar:
     def draw(self, WIN):
         WIN.blit(PLAYER_IMAGE, (self.rect.x, self.rect.y)) # Draw player on screen
 
+class Fire(Game):
+    def __init__(self):
+        x = random.randint(0, WIDTH-30) # Spawn fire at random location on screen
+        super().__init__(FIRE_IMAGE, x, -45, 30, 45) # Inherit self parameters from Game parent class
+        self.vel = 3 # Set fire velocity
+
+    def move(self):
+        self.rect.y += self.vel # Fire moves down screen according to velocity
+    
+    def off_screen(self):
+        return self.rect.y > HEIGHT # Fire moves off screen 
+    
+    def hit(self, avatar):
+        return self.rect.colliderect(avatar.rect)
+
+
         
 
 # Function to draw items on gameplay screen 
-def draw(player, time_elapsed, fires):
+def draw(player, time_elapsed, fires)
     WIN.blit(BG, (0, 0))
 
     time_text = FONT.render(f'Time: {round(time_elapsed)}s', 1, 'white') # Create gameplay clock
