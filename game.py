@@ -19,9 +19,11 @@ PLAYER_IMAGE = pygame.transform.scale(PLAYER_IMAGE, (PLAYER_WIDTH, PLAYER_HEIGHT
 
 PLAYER_VEL = 5
 
-FIRE_WIDTH = 10
-FIRE_HEIGHT = 20
+FIRE_IMAGE = pygame.image.load('game_images/flame_transparent.png').convert_alpha()
+FIRE_WIDTH = 30
+FIRE_HEIGHT = 45
 FIRE_VEL = 3
+FIRE_IMAGE = pygame.transform.scale(FIRE_IMAGE, (FIRE_WIDTH, FIRE_HEIGHT))
 
 FONT = pygame.font.SysFont('comicsans', 30)
 
@@ -34,7 +36,7 @@ def draw(player, time_elapsed, fires):
     WIN.blit(PLAYER_IMAGE, (player.x, player.y))
 
     for fire in fires:
-        pygame.draw.rect(WIN, 'red', fire)
+        WIN.blit(FIRE_IMAGE, (fire.x, fire.y))
 
     pygame.display.update() 
 
