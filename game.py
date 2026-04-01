@@ -19,20 +19,24 @@ FIRE_IMAGE = pygame.transform.scale(pygame.image.load('game_images/flame_transpa
 
 FONT = pygame.font.SysFont('comicsans', 30) # Set font type
 
-class Player: 
+class Avatar: 
+    # Initialize avatar parameters 
     def __init__(self):
         self.rect = PLAYER_IMAGE.get_rect()
-        self.rect.x = 200
-        self.rect.bottom = HEIGHT
-        self.vel = 5
+        self.rect.x = 200 # Starting location 
+        self.rect.bottom = HEIGHT # Place on bottom of gameplay screen
+        self.vel = 5 # Set velocity
     
     def move(self, keys):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and self.rect.x - self.vel >= 0:
-            self.rect.x -= self.vel # Moves avatar left with left arrow key press
+            self.rect.x -= self.vel # Move avatar left with left arrow key press
 
         elif keys[pygame.K_RIGHT] and self.rect.x + self.vel + self.rect.width <= WIDTH:
-            self.rect.x += self.vel # Moves avatar right with right arrow key press 
+            self.rect.x += self.vel # Move avatar right with right arrow key press
+
+    def draw(self, WIN):
+        WIN.blit(PLAYER_IMAGE, (self.rect.x, self.rect.y)) # Draw player on screen
 
         
 
