@@ -15,9 +15,9 @@ pygame.display.set_caption('Kyle Saves The Day!')
 # Load and scale background, avatar, and fire images
 BG = pygame.transform.scale(pygame.image.load('game_images/game_background.jpg')
                             , (WIDTH, HEIGHT))
-PLAYER_IMAGE = pygame.transform.scale(pygame.image.load('game_images/' \
+PLAYER_IMAGE = pygame.transform.smoothscale(pygame.image.load('game_images/' \
 'firefighter_transparent.png').convert_alpha(), (100, 100))
-FIRE_IMAGE = pygame.transform.scale(pygame.image.load('game_images/' \
+FIRE_IMAGE = pygame.transform.smoothscale(pygame.image.load('game_images/' \
 'flame_transparent.png').convert_alpha(), (30, 45))
 
 FONT = pygame.font.SysFont('comicsans', 30) # Set font type
@@ -27,6 +27,7 @@ class Game:
         self.image = image
         self.rect = pygame.Rect(x, y, width, height)
         self.mask = pygame.mask.from_surface(image)
+        self.window_locs = []
 
     def draw(self, win):
         win.blit(self.image, (self.rect.x, self.rect.y)) # Draw object on screen
@@ -138,6 +139,12 @@ class Play:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                loc = pygame.mouse.get_pos()
+
+                if loc not in self.window_locs:
+                    self.window_locs.append(loc)
 
 
             # Allow avatar movement with key press
@@ -153,7 +160,7 @@ class Play:
                 
             self.draw() # Draw all components until game ends
 
-
+        print(self.window_locs)
         pygame.quit()
 
 # Run game!
