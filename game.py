@@ -21,7 +21,37 @@ PLAYER_IMAGE = pygame.transform.smoothscale(pygame.image.load('game_images/' \
 FIRE_IMAGE = pygame.transform.smoothscale(pygame.image.load('game_images/' \
 'flame_transparent.png').convert_alpha(), (30, 45))
 
-FONT = pygame.font.SysFont('comicsans', 30) # Set font type
+FONT = pygame.font.SysFont('comicsans', 50) # Set font type
+
+def menu():
+    clock = pygame.time.Clock()
+    while True:
+        WIN.fill((0, 0, 0))
+
+        title = FONT.render('Choose Difficulty', True, (255, 255, 255))
+        easy = FONT.render('Press 1 - Easy', True, (0, 255, 0))
+        medium = FONT.render('Press 2 - Medium', (255, 255, 0))
+        hard = FONT.render ('Press 3 - Hard', (255, 0, 0))
+
+        WIN.blit(title, (WIDTH//2 - title.get_width()//2, 200))
+        WIN.blit(easy, (WIDTH//2 - easy.get_width()//2, 320))
+        WIN.blit(medium, (WIDTH//2 - medium.get_width()//2, 380))
+        WIN.blit(hard, (WIDTH//2 - hard.get_width()//2, 440))
+
+        pygame.display.update()
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return None
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    return 'easy'
+                if event.key == pygame.K_2:
+                    return 'medium'
+                if event.key == pygame.K_3:
+                    return 'hard'
 
 class Game:
     def __init__(self, image, x, y, width, height):
@@ -51,12 +81,11 @@ class Avatar(Game):
         WIN.blit(PLAYER_IMAGE, (self.rect.x, self.rect.y)) # Draw player
 
 class Fire(Game):
-    def __init__(self):
-
-        x = random.randint(0, WIDTH-30) # Spawn fire at random location
-        # Inherit self parameters from Game parent class
-        super().__init__(FIRE_IMAGE, x, -45, 30, 45) 
-        self.vel = 3 # Set fire velocity
+    def __init__(self, x, y):
+        rect = FIRE_IMAGE.get_rect(center=(x, y))
+        # Inherit self parameters from parent class to spawn fires in windows
+        super().__init__(FIRE_IMAGE, rect.x, rect.y, rect.width, rect.height) 
+        self.vel = 0 # Set fire velocity
 
     def move(self):
         self.rect.y += self.vel # Fire moves down screen according to velocity
@@ -89,25 +118,21 @@ class Play:
         with open('windows.csv', newline='') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                x = int(row['x'])
-                y = int(row['y'])
+                x = int(row['x'].strip())
+                y = int(row['y'].strip())
                 self.window_locs.append((x, y))
         
     def spawn_fires(self):
         for i in range(3):
-            self.fires.append(Fire()) # Add fire to list
+            x, y = random.choice(self.window_locs)
+            self.fires.append(Fire(x, y)) # Add fire to window
         
         self.fire_add_increment = max(200, self.fire_add_increment-50)
         self.fire_count = 0
     
     def fire_location(self):
         for fire in self.fires[:]:
-            fire.move()
-
-            if fire.off_screen():
-                self.fires.remove(fire) # Remove fire if off screen
-            
-            elif fire.hit(self.avatar):
+            if fire.hit(self.avatar):
                 self.fires.remove(fire)
                 self.hit = True # Change condition after avatar is hit
     
