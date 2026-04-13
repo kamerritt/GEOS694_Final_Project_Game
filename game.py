@@ -28,14 +28,6 @@ class Game:
         self.image = image
         self.rect = pygame.Rect(x, y, width, height)
         self.mask = pygame.mask.from_surface(image)
-        self.window_locs = []
-
-        with open('windows.csv', newline='') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                x = int(row['x'])
-                y = int(row['y'])
-                self.window_locs.append((x, y))
 
     def draw(self, win):
         win.blit(self.image, (self.rect.x, self.rect.y)) # Draw object on screen
@@ -60,6 +52,16 @@ class Avatar(Game):
 
 class Fire(Game):
     def __init__(self):
+        self.window_locs = []
+
+        # Create a list of window locations for fire spawning
+        with open('windows.csv', newline='') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                x = int(row['x'])
+                y = int(row['y'])
+                self.window_locs.append((x, y))
+
         x = random.randint(0, WIDTH-30) # Spawn fire at random location
         # Inherit self parameters from Game parent class
         super().__init__(FIRE_IMAGE, x, -45, 30, 45) 
