@@ -36,21 +36,32 @@ class Game:
 
 class Avatar(Game): 
     def __init__(self):
+        self.original_image = PLAYER_IMAGE
+        self.flipped_image = pygame.transform.flip(PLAYER_IMAGE, True, False)
+        self.facing_right = False
+        self.image = self.original_image
         # Inherit self parameters from Game parent class
-        super().__init__(PLAYER_IMAGE, 200, HEIGHT-100, 100, 100) 
+        super().__init__(self.image, 200, HEIGHT-100, 100, 100) 
         self.vel = 5 # Set avatar velocity
     
     def move(self, keys):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and self.rect.x - self.vel >= 0:
+        
+        if keys[pygame.K_LEFT] and self.rect.x - self.vel >= -50:
+            self.facing_right = False
             self.rect.x -= self.vel # Move avatar left
 
         elif keys[pygame.K_RIGHT] and (self.rect.x + self.vel + 
                                        self.rect.width <= WIDTH):
+            self.facing_right = True
             self.rect.x += self.vel # Move avatar right
-
-    def draw(self, WIN):
-        WIN.blit(PLAYER_IMAGE, (self.rect.x, self.rect.y)) # Draw player
+        
+        # Update image and mask based on facing direction
+        if self.facing_right:
+            self.image = self.flipped_image
+        else:
+            self.image = self.original_image
+        self.mask = pygame.mask.from_surface(self.image)
 
 class Fire(Game):
     def __init__(self, x, y):
