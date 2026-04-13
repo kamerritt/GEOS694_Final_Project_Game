@@ -104,7 +104,7 @@ class Play:
         self.won = False
 
         self.clock = pygame.time.Clock() # Gameplay clock
-        self.starttime = time.time()
+        self.start_time = time.time()
 
         self.fire_add_increment = spawn_time # Add fire depending on difficulty
         self.fire_count = 0
@@ -159,7 +159,7 @@ class Play:
     def draw(self):
         WIN.blit(BG, (0, 0)) # Draw background
 
-        time_elapsed = time.time() - self.starttime
+        time_elapsed = time.time() - self.start_time
         time_text = FONT.render(f'Time: {round(time_elapsed)}s', 1, 'white')
         WIN.blit(time_text, (10, 10)) # Draw gameplay clock in upper left corner
 
