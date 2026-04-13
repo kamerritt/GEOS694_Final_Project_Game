@@ -74,6 +74,7 @@ class Water(Game):
     # Inherit self parameters from parent class
     def __init__(self, x, y):
         super().__init__(WATER_IMAGE, x, y, 10, 20)
+        self.vel = -10
     
     def move(self):
         self.rect.y += self.vel
@@ -100,6 +101,8 @@ class Play:
         self.run = True
         self.hit = False
 
+        self.spawned_once = False
+
 
         self.window_locs = []
 
@@ -112,6 +115,7 @@ class Play:
                 self.window_locs.append((x, y))
         
     def spawn_fires(self):
+        self.spawned_once = True
         for i in range(3):
             x, y = random.choice(self.window_locs)
             self.fires.append(Fire(x, y)) # Add fire to window
@@ -124,6 +128,20 @@ class Play:
             if fire.hit(self.avatar):
                 self.fires.remove(fire)
                 self.hit = True # Change condition after avatar is hit
+
+    def shoot_water(self):
+        for water in self.waters[:]:
+            water.move()
+
+            if water.off_screen():
+                self.waters.remove(water)
+                continue
+
+            for fire in self.fires[:]:
+                if water.hit(fire):
+                    self.fires.remove(fire)
+                    self.waters.remove(water)
+                    break
     
     # Draw objects on gameplay screen
     def draw(self):
@@ -138,6 +156,9 @@ class Play:
         for fire in self.fires:
             fire.draw(WIN) # Draw fires on screen
         
+        for water in self.waters:
+            water.draw(WIN) # Draw water on screen 
+
         pygame.display.update()
 
     
@@ -159,13 +180,15 @@ class Play:
             if self.fire_count > self.fire_add_increment:
                 self.spawn_fires()
             
+            self.shoot_water() 
+            
             # End game if user clicks to exit screen
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.run = False
             
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
+                    if event.key == pygame.K_SPACE: # Shoot water with space key
                         water = Water(self.avatar.rect.centerx, 
                                       self.avatar.rect.top)
                         self.waters.append(water)
@@ -177,6 +200,9 @@ class Play:
 
             self.fire_location() # Handle fires
 
+            if self.spawned_once and len(self.fires) == 0:
+                self.won = True
+
             # End game if user is hit by fire
             if self.hit:
                 self.end_game()
@@ -184,10 +210,26 @@ class Play:
             
             if len(self.fires) > 20:
                 self.hit = True
+
+            if self.won: 
+                self.win_screen()
+                break    
+
             self.draw() # Draw all components until game ends
 
         #print(self.window_locs)
         pygame.quit()
+
+# If all fires are put out, the user wins the game!
+    def win_screen(self):
+        win_text = FONT.render('You are a hero!', 1, 'white')
+        WIN.blit(win_text, (
+            WIDTH/2 - win_text.get_width()/2,
+            HEIGHT/2 - win_text.get_height()/2
+        ))
+
+        pygame.display.update()
+        pygame.time.delay(4000)
 
 # Menu to select difficulty 
 def menu():
