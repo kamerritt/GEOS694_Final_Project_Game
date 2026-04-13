@@ -63,7 +63,7 @@ class Fire(Game):
         return self.rect.y > HEIGHT # Fire moves off screen 
     
     def hit(self, avatar):
-        # Allow for exact collisions between fire and avatar
+        # Allow for exact collisions between fire and avatar with mask shape
         dist = (self.rect.x - avatar.rect.x, self.rect.y - avatar.rect.y)
         return avatar.mask.overlap(self.mask, dist) is not None
     
@@ -77,6 +77,7 @@ class Play:
 
         self.fire_add_increment = 2000 # Add fire every 2 seconds
         self.fire_count = 0
+        self.window_locs = [] # Empty list of building locations for fire spawn
 
         self.run = True
         self.hit = False
@@ -138,7 +139,8 @@ class Play:
                 if event.type == pygame.QUIT:
                     self.run = False
 
-            # Allow avatar movement
+
+            # Allow avatar movement with key press
             keys = pygame.key.get_pressed()
             self.avatar.move(keys)
 
