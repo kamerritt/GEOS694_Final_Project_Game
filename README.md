@@ -21,8 +21,8 @@ The Firefighting Game only requires one script, `game.py`, that:
 
 - Initializes the gameplay screen with the background `game_background.jpg`
 - Provides the user an avatar `firefighter_transparent.jpg`
-- Allows the user to move left and right to dodge flames (`flame_transparent.jpg`)
-- Ends the game when a flame hits the avatar
+- Allows the user to move left and right and shoot water (`water_transparent.png`) to put out fires(`flame_transparent.png`)
+- Ends the game if a flame hits the avatar, or if all fires are extinguished
 
 ### Dependencies
 
@@ -31,4 +31,5 @@ This video game uses the following packages:
 - pygame
 - time
 - random
+- csv
   
