@@ -2,6 +2,7 @@
 import pygame
 import time
 import random
+import csv
 
 # Initialize game and font
 pygame.init()
@@ -28,6 +29,13 @@ class Game:
         self.rect = pygame.Rect(x, y, width, height)
         self.mask = pygame.mask.from_surface(image)
         self.window_locs = []
+
+        with open('windows.csv', newline='') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                x = int(row['x'])
+                y = int(row['y'])
+                self.window_locs.append((x, y))
 
     def draw(self, win):
         win.blit(self.image, (self.rect.x, self.rect.y)) # Draw object on screen
@@ -140,11 +148,11 @@ class Play:
                 if event.type == pygame.QUIT:
                     self.run = False
             
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                loc = pygame.mouse.get_pos()
+            #if event.type == pygame.MOUSEBUTTONDOWN:
+            #    loc = pygame.mouse.get_pos()
 
-                if loc not in self.window_locs:
-                    self.window_locs.append(loc)
+            #    if loc not in self.window_locs:
+            #        self.window_locs.append(loc)
 
 
             # Allow avatar movement with key press
@@ -160,7 +168,7 @@ class Play:
                 
             self.draw() # Draw all components until game ends
 
-        print(self.window_locs)
+        #print(self.window_locs)
         pygame.quit()
 
 # Run game!
