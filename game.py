@@ -1,3 +1,14 @@
+"""
+This code creates and runs a game where the user plays as a firefighter who is 
+tasked with putting out fires in several burning buildings. The user can move
+left and right using the arrow keys, and shoots water to put out the fires 
+using the space key. The game is won when the user puts out all the fires, and
+is lost when the user is hit by a fire, or if there are too many fires on the
+screen to put out. Additionally, the user can select from three difficulty
+levels at the start of the game, which determines the rate at which the fires
+spawn on the screen. 
+"""
+
 # Import packages
 import pygame
 import time
