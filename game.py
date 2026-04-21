@@ -1,12 +1,24 @@
 """
-This code creates and runs a game where the user plays as a firefighter who is 
+This script creates and runs a game where the user plays as a firefighter who is 
 tasked with putting out fires in several burning buildings. The user can move
 left and right using the arrow keys, and shoots water to put out the fires 
 using the space key. The game is won when the user puts out all the fires, and
 is lost when the user is hit by a fire, or if there are too many fires on the
 screen to put out. Additionally, the user can select from three difficulty
 levels at the start of the game, which determines the rate at which the fires
-spawn on the screen. 
+spawn on the screen.
+
+The code is organized into several classes: Game, Avatar, Fire, Water, and Play. 
+The Game class is a parent class that contains attributes and methods common to 
+all game objects (i.e., image, rectangle, and mask). The Avatar class inherits 
+from Game and represents the player's character, allowing for movement and water
+shooting. The Fire class also inherits from Game and represents the fires that 
+spawn on the screen, with methods to move, check if they are off-screen, and 
+check for collisions with the avatar. The Water class inherits from Game and 
+represents the water shot by the avatar. It is able to check for collisions 
+with fires. The Play class manages the overall game state, including spawning 
+fires, handling user input, updating the game state, and displaying the game 
+on the screen.
 """
 
 # Import packages
