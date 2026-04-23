@@ -11,7 +11,7 @@ The use of conda (or mamba) is recommended to create a new environment using the
 git clone https://github.com/kamerritt/GEOS694_Final_Project_Game.git
 cd GEOS694_Final_Project_Game
 conda env create -f environment.yml
-conda activate ff_game_env
+conda activate ff_game
 ```
 
 ### Current Version Information (v1.0.0)
@@ -20,9 +20,14 @@ The Firefighting Game only requires one script, `game.py`, that:
 
 - Initializes the gameplay screen with the background `game_background.jpg`
 - Provides the user an avatar `firefighter_transparent.jpg`
-- Allows the user to move left and right and shoot water (`water_transparent.png`) to put out fires (`flame_transparent.png`)
+- Allows the user to move left and right and shoot water (space bar) (`water_transparent.png`) to put out fires (`flame_transparent.png`)
 - Ends the game if a flame hits the avatar, or if all fires are extinguished
 
+The game can be initiated with the following commands:
+```                                                                             cd GEOS694_Final_Project_Game                                             
+conda activate ff_game
+python game.py                                                          
+``` 
 ### Dependencies
 
 This video game uses the following packages:
